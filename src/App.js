@@ -1,10 +1,9 @@
-
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import './App.css';
 import './reset.css'
 import db from './firebase_config';
-import { useState } from 'react/cjs/react.development';
+import { useState } from 'react';
 import { useEffect } from 'react';
 
 
