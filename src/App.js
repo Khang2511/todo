@@ -1,11 +1,11 @@
-import firebase from 'firebase/compat/app';
+
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import './App.css';
 import './reset.css'
 import db from './firebase_config';
 import { useState } from 'react/cjs/react.development';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
 
 
@@ -20,11 +20,6 @@ function App() {
     getTodos();
   },[])
   
-  // // Focus
-  // const inputRef = useRef(null)
-  //   useEffect(() => {
-  //   inputRef.current.focus()
-  // })
 
   function getTodos(){
     db.collection("todos").onSnapshot(function(querySnapshot){
@@ -51,7 +46,7 @@ function App() {
     e.preventDefault();
 
     // Thêm dữ liệu vào firebase
-    if (todoInput!= "") {
+    if (todoInput!== "") {
       db.collection("todos").add({
         inprogress: true,
         todo: todoInput,
@@ -74,7 +69,7 @@ function App() {
 
   // Sửa
   function editTodo(id){
-   if(editingText!="")
+   if(editingText!=="")
     db.collection("todos").doc(id).update({
       todo: editingText,
     });
@@ -90,7 +85,7 @@ function App() {
 function handleDone(){
     const a= [];
     for(let i =0; i<todos.length;i++){
-        if(todos[i].inprogress == false)
+        if(todos[i].inprogress === false)
             a.push(todos[i]);
     }
     setValue(a);
@@ -99,7 +94,7 @@ function handleDone(){
 function handleOnProgress(){
     const a= [];
     for(let i =0; i<todos.length;i++){
-        if(todos[i].inprogress == true)
+        if(todos[i].inprogress === true)
             a.push(todos[i]);
     }
     setValue(a);
@@ -127,7 +122,7 @@ function handleOnProgress(){
           : 'todo__row todo__row--complete'} 
           >
 
-            {todoEditing == todo.id ? 
+            {todoEditing === todo.id ? 
             (
               <form>
                 <input
@@ -143,7 +138,7 @@ function handleOnProgress(){
               onClick={()=>changeStatus(todo.id,todo.inprogress)}
               >{todo.todo}</div>
             )}
-            {todoEditing == todo.id ? 
+            {todoEditing === todo.id ? 
             (
               <div className="todo__row__button">
                 <button className="todo__row__btn"
