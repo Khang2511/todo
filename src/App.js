@@ -1,3 +1,4 @@
+import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import './App.css';
@@ -6,14 +7,12 @@ import db from './firebase_config';
 import { useState } from 'react';
 import { useEffect } from 'react';
 
-
-
 function App() {
   const [todoInput,setTodoInput] = useState('');
   const [todos, setTodos] = useState([]);
   const [todoEditing, setTodoEditing] = useState(null)
   const [editingText, setEditingText] = useState("")
-  const[value, setValue]=useState([])
+  const [value, setValue]=useState([])
 
   useEffect(()=>{
     getTodos();
@@ -21,7 +20,7 @@ function App() {
   
 
   function getTodos(){
-    db.collection("todos").onSnapshot(function(querySnapshot){
+    db.collection("todos").orderBy("timeStamp").onSnapshot(function(querySnapshot){
       setTodos(querySnapshot.docs.map((doc)=>(
         {
           id: doc.id,
@@ -49,9 +48,11 @@ function App() {
       db.collection("todos").add({
         inprogress: true,
         todo: todoInput,
+        timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
       });
     }
     setTodoInput('');
+    
   }
 
   // Thay đổi trạng thái
@@ -99,6 +100,15 @@ function handleOnProgress(){
     setValue(a);
 }
 
+function onKeyDown(e){
+  console.log(e.key)
+  console.log(todoEditing)
+
+  if(e.key === 'Enter'){
+    editTodo(todoEditing);
+  }
+}
+
   return (
     <div className="App">
       <header className="App-header">
@@ -106,7 +116,6 @@ function handleOnProgress(){
         <div className='todo'>
         <form >
           <input
-          // ref={inputRef}
           value={todoInput}
           onChange={(e) => {
             setTodoInput(e.target.value)
@@ -114,33 +123,41 @@ function handleOnProgress(){
           ></input>
           <button onClick={addTodo}>Add</button>
         </form>
-  
+        <div className='tabs'>
+          <button className="tabs__choice" onClick={handleAll}>All</button>
+            <button className="tabs__choice" onClick={handleDone}>Done</button>
+            <button className="tabs__choice" onClick={handleOnProgress}>On progress</button>
+          </div>
         {value.map((todo) => (
-          <div key={todo.id} 
+          <div 
+          key={todo.id} 
           className={todo.inprogress ? 'todo__row ' 
           : 'todo__row todo__row--complete'} 
           >
-
             {todoEditing === todo.id ? 
             (
               <form>
                 <input
                 type="text"
-                onChange={(e) => setEditingText(e.target.value)}
-                 
+                onChange={(e) => setEditingText(e.target.value) }
+                onKeyDown={onKeyDown}
+                defaultValue={todo.todo}
                 />
               </form>
             ) 
             : 
             (
-              <div className="todo__row__text" 
+              <div 
+              className="todo__row__text" 
               onClick={()=>changeStatus(todo.id,todo.inprogress)}
               >{todo.todo}</div>
             )}
             {todoEditing === todo.id ? 
             (
               <div className="todo__row__button">
-                <button className="todo__row__btn"
+                <button 
+                className="todo__row__btn"
+                type='submit'
                 onClick={() => editTodo(todo.id)}
                 >Submit
                 </button>
@@ -163,9 +180,7 @@ function handleOnProgress(){
              
         </div>
         ))}
-            <button className="tabs__choice" onClick={handleAll}>All</button>
-            <button className="tabs__choice" onClick={handleDone}>Done</button>
-            <button className="tabs__choice" onClick={handleOnProgress}>On progress</button>
+          
         </div>
       </header>
     </div>

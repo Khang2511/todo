@@ -5,23 +5,24 @@
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
+  padding: 5vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
 }
 
 .input__form{
   display: flex;
- max-width: 300px;
+  max-width: 300px;
 
 }
 
 .todo{
   margin: 10px;
   border: solid #b8c412 2px;
+
 }
 
 .todo__row{
@@ -48,6 +49,7 @@
   display: flex;
   justify-content: space-between;
   width: 30%;
+  margin-top: 5px;
 }
 .todo__row__btn{
   height: 25px;
