@@ -34,10 +34,10 @@
 }
 
 .todo__row__text{
-  width: 50%;
   border: solid #00ffff 2px;
   font-size: 15px;
-
+  text-align: center;
+  cursor: pointer;
 }
 
 .todo__row--complete{
@@ -61,4 +61,11 @@
   width: 100px;
   margin: 20px;
   background-color: rgb(255, 228, 196);
+  border: none;
+}
+
+.tabs__choice--choose{
+  background-color: #af6709;
+  color: #ffffff;
+  
 }
